@@ -30,7 +30,8 @@ export async function loader() {
 
 export function Home() {
   const orders: any[] | undefined = useLoaderData() as any;
-  const [selected, setSelected] = useState<any>(null);
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState<any>(null);
 
   console.log('data', orders);
 
@@ -78,8 +79,27 @@ export function Home() {
                 <td className='py-4 px-6'>{item.address ?? ''}</td>
                 <td className='py-4 px-6'>{item.tel ?? ''}</td>
                 <td className='py-4 px-6'>{item.orderTotal ?? ''}</td>
-                <td className='py-4 px-6'>Edit</td>
-                <td className='py-4 px-6'>Delete</td>
+                <td className='py-4 px-6'>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      setOpen(true);
+                      setData({
+                        orderNumber: '2323',
+                        orderDueDate: '2022-11-06',
+                        buyerName: 'nkqnkqnk',
+                        address: 'nknk',
+                        tel: 'nknkn3knk',
+                        orderTotal: 'nknknk',
+                      });
+                    }}
+                  >
+                    Edit
+                  </button>
+                </td>
+                <td className='py-4 px-6'>
+                  <button type='button'>Delete</button>
+                </td>
               </tr>
             );
           })}

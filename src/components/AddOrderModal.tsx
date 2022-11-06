@@ -3,14 +3,21 @@ import { Fragment, useRef, useState } from 'react';
 import {
   useFetcher,
   Form,
-  useLoaderData
+  useLoaderData,
+  Link,
+  useNavigate,
+  useLocation
 } from 'react-router-dom';
 
 export default function AddOrderModal() {
-  const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
-
+  
   const fetcher = useFetcher();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const open = location.pathname === '/new'
+  const onClose = () => navigate('/');
 
   return (
     <>
@@ -19,7 +26,7 @@ export default function AddOrderModal() {
           as='div'
           className='relative z-10'
           initialFocus={cancelButtonRef}
-          onClose={setOpen}
+          onClose={onClose}
         >
           <Transition.Child
             as={Fragment}
@@ -162,14 +169,14 @@ export default function AddOrderModal() {
                       <button
                         type='submit'
                         className='inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm'
-                        onClick={() => setOpen(false)}
+                        onClick={onClose}
                       >
                         Save
                       </button>
                       <button
                         type='button'
                         className='mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm'
-                        onClick={() => setOpen(false)}
+                        onClick={onClose}
                         ref={cancelButtonRef}
                       >
                         Cancel
@@ -182,7 +189,8 @@ export default function AddOrderModal() {
           </div>
         </Dialog>
       </Transition.Root>
-      <button onClick={() => setOpen(o => !o)}>New Order</button>
+      {/* <button onClick={() => setOpen((o: any) => !o)}>New Order</button> */}
+      <Link to='/new'>New Order</Link>
     </>
   );
 }

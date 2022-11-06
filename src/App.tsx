@@ -52,6 +52,7 @@ const authRoutes = createBrowserRouter(
     <>
       <Route path='/' element={<Root />} errorElement={<ErrorPage />}>
         <Route index element={<Home />} loader={homeLoader} action={homeAction} />
+        <Route path="/new" element={<Home />} loader={homeLoader} action={homeAction} />
         <Route errorElement={<ErrorPage />}>
           <Route path='/:id/destroy' action={destroyAction}></Route>
         </Route>
