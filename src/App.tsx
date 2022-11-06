@@ -8,7 +8,7 @@ import {
 import { useUser } from './context/auth-context';
 import { action as destroyAction } from './routes/destroy';
 import ErrorPage from './routes/error-page';
-import { action as homeAction, Home } from './routes/Home';
+import { action as homeAction, Home, loader as homeLoader } from './routes/Home';
 import { Login } from './routes/Login';
 import Root from './routes/Root';
 
@@ -51,7 +51,7 @@ const authRoutes = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path='/' element={<Root />} errorElement={<ErrorPage />}>
-        <Route index element={<Home />} action={homeAction} />
+        <Route index element={<Home />} loader={homeLoader} action={homeAction} />
         <Route errorElement={<ErrorPage />}>
           <Route path='/:id/destroy' action={destroyAction}></Route>
         </Route>
