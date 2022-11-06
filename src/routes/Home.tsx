@@ -1,4 +1,4 @@
-import AddOrderModal from '../components/AddOrderModal';
+import AddEditOrderModal from '../components/AddEditOrderModal';
 import { getCookie, setCookie } from '../utils/cookie';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useRef, useState } from 'react';
@@ -18,7 +18,6 @@ export async function action({ request, params }: any) {
   // console.log('existingOrders', existingOrders);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  console.log('edit page', data.edit);
 
   const record = data;
   const newOrdersList =
@@ -47,7 +46,7 @@ export function Home() {
 
   return (
     <div className='overflow-x-auto relative'>
-      <AddOrderModal />
+      <AddEditOrderModal />
       <table className='w-full text-sm text-left text-gray-500'>
         <thead className='text-xs text-gray-700 uppercase bg-gray-50'>
           <tr>

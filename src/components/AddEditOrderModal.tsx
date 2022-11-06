@@ -10,7 +10,7 @@ import {
   useParams,
 } from 'react-router-dom';
 
-export default function AddOrderModal() {
+export default function AddEditOrderModal() {
   const cancelButtonRef = useRef(null);
 
   const fetcher = useFetcher();
@@ -21,15 +21,11 @@ export default function AddOrderModal() {
   const pathname = location.pathname;
   const orders: any[] | undefined = useLoaderData() as any;
 
-  // console.log('AddOrderModal', orders);
-
   const isEditPage = pathname.startsWith('/edit/')
   const open = pathname === '/new' || isEditPage;
   const onClose = () => navigate('/');
 
   const currentOrder = orders?.find(item => item.orderNumber === orderNumber);
-  // console.log('currentOrder', currentOrder);
-  
 
   return (
     <>
