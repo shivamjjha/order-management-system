@@ -2,23 +2,35 @@ import AddOrderModal from '../components/AddOrderModal';
 import { getCookie, setCookie } from '../utils/cookie';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useRef, useState } from 'react';
-import { useFetcher, Form, useLoaderData } from 'react-router-dom';
+import {
+  useFetcher,
+  Form,
+  useLoaderData,
+  Link,
+  redirect,
+} from 'react-router-dom';
 
 export async function action({ request, params }: any) {
-  console.log('action');
+  console.log({ request, params });
+  // console.log('action');
   const ordersFromCookie = getCookie('orders');
   const existingOrders = ordersFromCookie ? JSON.parse(ordersFromCookie) : [];
-  console.log('existingOrders', existingOrders);
+  // console.log('existingOrders', existingOrders);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  console.log('data', data);
+  console.log('edit page', data.edit);
 
   const record = data;
-  const newOrdersList = [...existingOrders, record];
-  console.log('newRestaurantsList', newOrdersList);
+  const newOrdersList =
+    data.edit === 'true'
+      ? existingOrders?.map((item: any) =>
+          item.orderNumber === params.orderNumber ? record : item
+        )
+      : [...existingOrders, record];
+  // console.log('newRestaurantsList', newOrdersList);
 
   setCookie('orders', JSON.stringify(newOrdersList));
-  return;
+  return redirect('/');
 }
 
 export async function loader() {
@@ -30,10 +42,8 @@ export async function loader() {
 
 export function Home() {
   const orders: any[] | undefined = useLoaderData() as any;
-  const [open, setOpen] = useState(false);
-  const [data, setData] = useState<any>(null);
 
-  console.log('data', orders);
+  // console.log('data', orders);
 
   return (
     <div className='overflow-x-auto relative'>
@@ -66,13 +76,15 @@ export function Home() {
         </thead>
         <tbody>
           {orders?.map((item: any, idx) => {
+            const orderNumber = item.orderNumber;
+
             return (
               <tr className='bg-white border-b' key={idx}>
                 <th
                   scope='row'
                   className='py-4 px-6 font-medium text-gray-900 whitespace-nowrap'
                 >
-                  {item.orderNumber ?? ''}
+                  {orderNumber ?? ''}
                 </th>
                 <td className='py-4 px-6'>{item.orderDueDate ?? ''}</td>
                 <td className='py-4 px-6'>{item.buyerName ?? ''}</td>
@@ -80,22 +92,7 @@ export function Home() {
                 <td className='py-4 px-6'>{item.tel ?? ''}</td>
                 <td className='py-4 px-6'>{item.orderTotal ?? ''}</td>
                 <td className='py-4 px-6'>
-                  <button
-                    type='button'
-                    onClick={() => {
-                      setOpen(true);
-                      setData({
-                        orderNumber: '2323',
-                        orderDueDate: '2022-11-06',
-                        buyerName: 'nkqnkqnk',
-                        address: 'nknk',
-                        tel: 'nknkn3knk',
-                        orderTotal: 'nknknk',
-                      });
-                    }}
-                  >
-                    Edit
-                  </button>
+                  <Link to={`/edit/${orderNumber}`}>Edit</Link>
                 </td>
                 <td className='py-4 px-6'>
                   <button type='button'>Delete</button>
