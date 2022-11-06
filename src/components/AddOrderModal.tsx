@@ -6,18 +6,29 @@ import {
   useLoaderData,
   Link,
   useNavigate,
-  useLocation
+  useLocation,
+  useParams,
 } from 'react-router-dom';
 
 export default function AddOrderModal() {
   const cancelButtonRef = useRef(null);
-  
+
   const fetcher = useFetcher();
   const navigate = useNavigate();
   const location = useLocation();
-  
-  const open = location.pathname === '/new'
+  let { orderNumber } = useParams();
+
+  const pathname = location.pathname;
+  const orders: any[] | undefined = useLoaderData() as any;
+
+  console.log('AddOrderModal', orders);
+
+  const open = pathname === '/new' || pathname.startsWith('/edit/');
   const onClose = () => navigate('/');
+
+  const currentOrder = orders?.find(item => item.orderNumber === orderNumber);
+  console.log('currentOrder', currentOrder);
+  
 
   return (
     <>
@@ -77,6 +88,7 @@ export default function AddOrderModal() {
                                     id='grid-first-name'
                                     type='text'
                                     name='orderNumber'
+                                    defaultValue={currentOrder?.orderNumber ?? ''}
                                   />
                                   {/* <p className='text-red-500 text-xs italic'>
                                   Please fill out this field.
@@ -95,6 +107,7 @@ export default function AddOrderModal() {
                                     type='date'
                                     placeholder='Select Order Date'
                                     name='orderDueDate'
+                                    defaultValue={currentOrder?.orderDueDate ?? ''}
                                   />
                                 </div>
                               </div>
@@ -111,6 +124,7 @@ export default function AddOrderModal() {
                                     id='c-buyer-name'
                                     type='text'
                                     name='buyerName'
+                                    defaultValue={currentOrder?.buyerName ?? ''}
                                   />
                                 </div>
                               </div>
@@ -127,6 +141,7 @@ export default function AddOrderModal() {
                                     id='c-address'
                                     name='address'
                                     type='text'
+                                    defaultValue={currentOrder?.address ?? ''}
                                   />
                                 </div>
                               </div>
@@ -143,6 +158,7 @@ export default function AddOrderModal() {
                                     id='c-phone'
                                     type='tel'
                                     name='tel'
+                                    defaultValue={currentOrder?.tel ?? ''}
                                   />
                                 </div>
                                 <div className='w-full md:w-1/3 px-3 mb-6 md:mb-0'>
@@ -157,6 +173,7 @@ export default function AddOrderModal() {
                                     id='order-total'
                                     type='text'
                                     name='orderTotal'
+                                    defaultValue={currentOrder?.orderTotal ?? ''}
                                   />
                                 </div>
                               </div>
