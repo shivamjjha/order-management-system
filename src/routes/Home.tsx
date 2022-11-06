@@ -23,8 +23,8 @@ export async function action({ request, params }: any) {
   const newOrdersList =
     data.edit === 'true'
       ? existingOrders?.map((item: any) =>
-          item.orderNumber === params.orderNumber ? record : item
-        )
+        item.orderNumber === params.orderNumber ? record : item
+      )
       : [...existingOrders, record];
   // console.log('newRestaurantsList', newOrdersList);
 
@@ -94,7 +94,22 @@ export function Home() {
                   <Link to={`/edit/${orderNumber}`}>Edit</Link>
                 </td>
                 <td className='py-4 px-6'>
-                  <button type='button'>Delete</button>
+                  <Form
+                    method='post'
+                    action={`/${orderNumber}/destroy`}
+                    onSubmit={event => {
+                      if (
+                        !confirm(
+                          'Please confirm you want to delete this order.'
+                        )
+                      ) {
+                        event.preventDefault();
+                      }
+                    }}
+                  >
+                    <input type='hidden' value={orderNumber} />
+                    <button type='submit'>Delete</button>
+                  </Form>
                 </td>
               </tr>
             );
