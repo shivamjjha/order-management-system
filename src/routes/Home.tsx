@@ -10,12 +10,22 @@ import {
   redirect,
 } from 'react-router-dom';
 
+// TO allow multiple users to log in and log out and still maintain orders in cookies
+export const getUserName = () => {
+  const userCookieValue = getCookie('user') ?? ''
+  if (userCookieValue == null || userCookieValue == '') {
+    throw new Error('please log in first!')
+  }
+  const userName = JSON.parse(userCookieValue)?.username
+  return userName;
+}
+
 export async function action({ request, params }: any) {
-  console.log({ request, params });
-  // console.log('action');
-  const ordersFromCookie = getCookie('orders');
+  const userName = getUserName()
+  const ORDER_COOKIE_STRING = `${userName}:orders`
+
+  const ordersFromCookie = getCookie(ORDER_COOKIE_STRING);
   const existingOrders = ordersFromCookie ? JSON.parse(ordersFromCookie) : [];
-  // console.log('existingOrders', existingOrders);
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
 
@@ -26,14 +36,15 @@ export async function action({ request, params }: any) {
         item.orderNumber === params.orderNumber ? record : item
       )
       : [...existingOrders, record];
-  // console.log('newRestaurantsList', newOrdersList);
 
-  setCookie('orders', JSON.stringify(newOrdersList));
+  setCookie(ORDER_COOKIE_STRING, JSON.stringify(newOrdersList));
   return redirect('/');
 }
 
 export async function loader() {
-  const ordersFromCookie = getCookie('orders');
+  const userName = getUserName()
+  const ORDER_COOKIE_STRING = `${userName}:orders`
+  const ordersFromCookie = getCookie(ORDER_COOKIE_STRING);
   const existingOrders = ordersFromCookie ? JSON.parse(ordersFromCookie) : [];
 
   return existingOrders;
@@ -42,7 +53,6 @@ export async function loader() {
 export function Home() {
   const orders: any[] | undefined = useLoaderData() as any;
 
-  // console.log('data', orders);
 
   return (
     <div className='overflow-x-auto relative'>

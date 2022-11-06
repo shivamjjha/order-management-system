@@ -66,7 +66,7 @@ function AuthProvider(props: any) {
   const logout = useCallback(() => {
     dispatch({ type: LOGOUT });
     eraseCookie('user');
-    eraseCookie('orders');
+    // eraseCookie('orders');
     window.location.href = '/login';
   }, []);
 
@@ -84,7 +84,6 @@ function AuthProvider(props: any) {
   }, []);
 
   const login = useCallback(async (username: string, password: string) => {
-
     if (username == null || password == null) {
       // eslint-disable-next-line @typescript-eslint/no-throw-literal
       throw new Response('', {
@@ -92,7 +91,7 @@ function AuthProvider(props: any) {
         statusText: 'Invalid username or password',
       });
     }
-    const payload = { user: { username, password } };
+    const payload = { username };
     setCookie('user', JSON.stringify(payload));
     dispatch({ type: LOGIN, payload });
     // return { user: userRegistered.fields };
