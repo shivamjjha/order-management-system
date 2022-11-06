@@ -10,7 +10,7 @@ export async function action({ params }: any) {
     const ordersFromCookie = getCookie(ORDER_COOKIE_STRING)
     const existingOrders =  ordersFromCookie ? JSON.parse(ordersFromCookie) : []
     const filteredOrders = existingOrders.filter((item: any) => item.orderNumber !== orderNumber)
-    setCookie('orders', JSON.stringify(filteredOrders))
+    setCookie(ORDER_COOKIE_STRING, JSON.stringify(filteredOrders))
   }
   return redirect("/");
 }
