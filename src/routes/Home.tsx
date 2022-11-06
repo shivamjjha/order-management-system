@@ -14,7 +14,7 @@ import {
 export const getUserName = () => {
   const userCookieValue = getCookie('user') ?? ''
   if (userCookieValue == null || userCookieValue == '') {
-    throw new Error('please log in first!')
+    return null;
   }
   const userName = JSON.parse(userCookieValue)?.username
   return userName;
