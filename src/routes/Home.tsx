@@ -1,30 +1,37 @@
-import { useState } from 'react';
-import {
-  useFetcher,
-  useLoaderData
-} from 'react-router-dom';
 import AddOrderModal from '../components/AddOrderModal';
 import { getCookie, setCookie } from '../utils/cookie';
-
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment, useRef, useState } from 'react';
+import {
+  useFetcher,
+  Form,
+  useLoaderData
+} from 'react-router-dom';
 export async function action({ request, params }: any) {
+  console.log('action')
   const ordersFromCookie = getCookie('orders');
   const existingOrders = ordersFromCookie
     ? JSON.parse(ordersFromCookie)
     : [];
+  console.log('existingOrders', existingOrders)
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
+  console.log('data', data)
 
 
-  const record = JSON.parse(data?.data);
-  const newRestaurantsList = [...existingOrders, record];
+  // const record = JSON.parse(data?.data);
+  // const newRestaurantsList = [...existingOrders, record];
 
-  setCookie('orders', JSON.stringify(newRestaurantsList));
+  // setCookie('orders', JSON.stringify(newRestaurantsList));
+  return
 }
 
 export function Home() {
   const data: any = useLoaderData();
   const [selected, setSelected] = useState<any>(null);
-  const fetcher = useFetcher();
+  const [open, setOpen] = useState(false);
+  const cancelButtonRef = useRef(null);
+  const fetcher = useFetcher()
 
   return (
     <div className="overflow-x-auto relative">
